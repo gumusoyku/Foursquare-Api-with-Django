@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+
+    <title>Hipo</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width : 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+</head>
+<body>
+<form name="index_Form" action="{% url 'index' %}" method="GET">
+    <div align="center" data-file-height="135px" >
+        <h2 align="center">{{ error }}</h2>
+        <h1 align="center">The Ultimate Foursquare Client</h1>
+        <br> <br>
+
+        <input type="text"
+               name="objct"
+               size="25"
+               placeholder=" I am looking for .."
+               style="background-color:white;
+                      border: solid 1px #6E6E6E;
+                      height: 30px;
+                      font-size:18px;
+                      vertical-align:9px;
+                      " required>
+        <input type="text"
+               name="location"
+               size="25"
+               placeholder=" Location .."
+               style="background-color:white;
+                      border: solid 1px #6E6E6E;
+                      height: 30px;
+                      font-size:18px;
+                      vertical-align:9px;
+                      " required>
+        <input type="submit"
+               name="search"
+               value="Search"
+               style="height: 30px;
+                       font-size:18px;
+                       vertical-align:9px">
+    </div>
+    <br><br><br><br>
+
+</form>
+
+<div aria-valuemax="">
+    <div style="float:left; width:71%" >
+        {% if results %}
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Checkin Counts</th>
+                </tr>
+                {% for i in results %}
+                    {% if i != '' %}
+                        <tr>
+                            <td> {{ i.name }}</td>
+                                {% if i.contact.formattedPhone != null %}
+                                    <td>{{ i.contact.formattedPhone }}</td>
+                                {% else %}
+                                    <td>Undifed in system</td>
+                                {% endif %}
+                            <td>{{ i.stats.checkinsCount }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+    <div style="float:left; width: 20%; margin-left:30px;">
+        {% if results %}
+            <h2>Recent Searchs</h2>
+            <ol reversed>
+            {% for i in searched_dict %}
+                <li><a href="{% url 'index' %}?objct={{ i.objct }}&location={{ i.location }}" style="text-decoration:none">{{ i.objct }} in {{ i.location }}</a></li>
+            {% endfor %}
+            </ol>
+        <br>
+        <a href="{% url 'index' %}?delete=1" style="text-decoration:none;
+                                                    background-color: #f44336;
+                                                    color: white;
+                                                    padding: 14px 25px;
+                                                    text-align: center;
+                                                    text-decoration: none;
+                                                    display: inline-block }" >Reset</a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
